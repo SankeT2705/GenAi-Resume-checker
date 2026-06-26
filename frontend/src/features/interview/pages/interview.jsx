@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import "./Interview.scss";
+import "./interview.scss";
 import { useInterview } from "../hooks/useinterview";
 import { useParams } from "react-router";
 
