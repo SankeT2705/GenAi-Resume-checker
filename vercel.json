@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd server && npm install",
+  "buildCommand": "npm --prefix server install",
   "env": {
     "NODE_ENV": "production"
   },
