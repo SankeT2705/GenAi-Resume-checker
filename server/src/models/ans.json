@@ -1,0 +1,49 @@
+{
+candidate_name: 'Sanket Bobhate',
+  job_title: 'Software Development Engineer I',
+  match_score: 92,
+  technical_questions: [
+    'In your Agrichain project, how did you ensure data integrity across the blockchain and what consensus mechanism was utilized to validate transactions between farmers and distributors?',
+    'Your real-time chat application uses Socket.io; how would you modify the architecture to maintain state and ensure message delivery if the Node.js server scales horizontally across multiple instances?',
+    "Given your experience with both MySQL and MongoDB, explain the specific criteria you used to choose one over the other for the AI Interview Preparation Platform's data storage.",
+    'During your TCS training, you worked with REST APIs; describe how you would implement a rate-limiting strategy to protect these services from being overwhelmed by too many requests.',
+    'Explain how you would utilize Docker to ensure that the environment for your AI Interview Preparation Platform remains consistent between your local development machine and a production AWS instance.'
+  ],
+  technical_answers: [
+    "In Agrichain, data integrity was maintained through cryptographic hashing where each block contains the hash of the previous block, making the chain immutable. I implemented a simplified Proof of Authority or similar logic to ensure only verified stakeholders like distributors could commit transaction records. This ensured that once a product's journey was recorded, it could not be altered by unauthorized parties. The system used digital signatures to verify the identity of the sender for every transaction. This traceability directly addressed the transparency requirements between farmers and consumers.",
+    'To scale Socket.io horizontally, I would implement a Pub/Sub mechanism using Redis as a backplane to broadcast messages across different server nodes. This ensures that a client connected to Server A can receive a message sent by a client connected to Server B. Additionally, I would use sticky sessions at the Load Balancer level to ensure the initial handshake and subsequent polling stay with the same server instance. For message persistence, I would write messages to a database like MongoDB before broadcasting to handle offline delivery. This architecture prevents data loss and maintains real-time synchronization across a distributed cluster.',
+    'For the AI Interview platform, I chose MongoDB because resume data and interview transcripts are often semi-structured and vary in length, making a document-oriented schema more flexible. MySQL would be reserved for structured data like user authentication details and subscription logs where ACID compliance is critical. The choice depends on whether the priority is schema flexibility for evolving AI features or strict relational integrity for financial/user records. In a production environment, I would likely use a polyglot persistence approach to leverage the strengths of both. This ensures the application can handle complex queries in SQL while scaling content storage in NoSQL.',
+    "To implement rate limiting for REST APIs, I would use a middleware approach in Node.js, potentially utilizing a library like 'express-rate-limit' or a custom implementation with Redis. I would apply a Token Bucket or Leaky Bucket algorithm to track the number of requests coming from a specific IP address or API key within a fixed time window. If the limit is exceeded, the API would return a 429 'Too Many Requests' status code to the client. For a production-grade system, I would prefer offloading this to an API Gateway or a Load Balancer like AWS ALB to protect the application layer from resource exhaustion. This ensures high availability and prevents malicious actors from performing DoS attacks.",
+    "I would create a Dockerfile for the Node.js backend and the React frontend to package the application code, runtime, and dependencies into a single image. By using Docker Compose, I can define the entire stack, including the MongoDB database, to ensure that the networking and environment variables are identical across all environments. These images would be pushed to a container registry and then pulled onto an AWS EC2 instance or ECS cluster. This eliminates the 'it works on my machine' problem by isolating the application from the underlying host OS. It also simplifies the deployment process and allows for easy scaling of individual components."
+  ],
+  behavioral_questions: [
+    'Describe a specific technical challenge you faced while building the Agrichain project and the steps you took to overcome it.',
+    'During your TCS training or academic projects, how did you handle a situation where a team member was not contributing effectively to a deadline?',
+    'Tell me about a time you had to learn a new technology, such as AWS or Docker, on a tight schedule to complete a project.',
+    'How do you approach receiving critical feedback during a code review, and can you provide an example of a change you made based on such feedback?',
+    'Give an example of a time you identified a potential performance bottleneck in your code and took the initiative to optimize it.'
+  ],
+  behavioral_answers: [
+    'While developing Agrichain, I struggled with the latency of blockchain transactions affecting the user experience. I resolved this by implementing an asynchronous processing queue where the UI provides immediate feedback to the user while the transaction is confirmed in the background. This taught me the importance of balancing backend constraints with frontend usability.',
+    'In a recent hackathon, a teammate fell behind on their module due to a lack of familiarity with React hooks. I organized a brief pair-programming session to help them get up to speed and redistributed some of their smaller tasks among the rest of the team to ensure we met the submission deadline. This maintained team morale and project momentum.',
+    "For my AI Interview platform, I had to learn how to integrate OpenAI's API and manage asynchronous tasks in Node.js within two weeks. I dedicated the first three days to intensive documentation review and prototyping, which allowed me to build a functional MVP ahead of schedule. This experience improved my ability to rapidly prototype and integrate third-party services.",
+    'During my TCS training, a senior engineer pointed out that my SQL queries lacked proper indexing, leading to slow performance on large datasets. I took the feedback constructively, researched B-tree indexing, and refactored the database schema to improve query execution time by 40%. I now prioritize database optimization during the design phase.',
+    'In my real-time chat app, I noticed that the server memory usage spiked when multiple users joined simultaneously. I optimized the Socket.io event listeners and implemented a cleanup function to remove inactive connections, which stabilized the memory footprint. This proactive optimization ensured the application could handle higher concurrent traffic without crashing.'
+  ],
+  skill_gaps: [
+    "Distributed Caching: The JD prefers knowledge of caching (e.g., Redis), which is not explicitly mentioned in the candidate's profile.",
+    "Microservices Architecture: The candidate's projects appear to be monolithic; the JD prefers understanding of microservices.",
+    'Automated Testing: There is no mention of Unit Testing (JUnit, Jest) or Integration Testing frameworks in the resume.',
+    'CI/CD Pipelines: While Git/GitHub are mentioned, experience with automated deployment tools like Jenkins or GitHub Actions is missing.',
+    'Advanced System Design: The candidate has basic knowledge, but the JD requires contribution to architecture decisions for scalable applications.'
+  ],
+  preparation_plan: [
+    'Day 1: Data Structures and Algorithms. Focus on Graph algorithms and Dynamic Programming, as the candidate has solved 500+ problems but needs to ensure peak performance for SDE I interviews.',
+    "Day 2: System Design Fundamentals. Study Load Balancing, Caching (Redis), and CAP Theorem to address the JD's preference for distributed systems knowledge.",
+    'Day 3: Java and OOP Deep Dive. Review SOLID principles, Design Patterns (Factory, Singleton), and Java-specific memory management (JVM) as required by the JD.',
+    'Day 4: Database Engineering. Practice complex SQL queries, indexing strategies, and study the trade-offs between SQL (MySQL) and NoSQL (MongoDB) in high-scale environments.',
+    'Day 5: Project Technical Review. Prepare deep-dive explanations for Agrichain and the Chat App, focusing on security, scalability, and technical choices.',
+    'Day 6: Cloud and DevOps. Review AWS core services (EC2, S3, RDS) and practice writing Dockerfiles for existing projects to solidify containerization skills.',
+    'Day 7: Behavioral and Mock Interviews. Practice the STAR method for behavioral questions and conduct a mock technical interview focusing on REST API design and troubleshooting.'
+  ]
+}
