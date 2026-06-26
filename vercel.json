@@ -1,24 +1,19 @@
 {
   "version": 2,
   "buildCommand": "npm --prefix server install",
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "api/index.js": {
-      "memory": 1024,
-      "maxDuration": 30,
-      "runtime": "nodejs24.x"
+  "builds": [
+    {
+      "src": "server/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
     }
-  },
+  ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "api/index.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "api/index.js"
+      "dest": "server/server.js"
     }
   ]
 }
