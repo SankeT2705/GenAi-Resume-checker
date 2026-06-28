@@ -1,15 +1,14 @@
-const userModel= require("../models/user.model")
-const tokenBlackListModel=require ("../models/blacklist.model")
-const bcrypt= require("bcryptjs")
-const jwt=require("jsonwebtoken")
-
+const userModel = require("../models/user.model")
+const tokenBlackListModel = require("../models/blacklist.model")
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 /**
  * @name registerUserController
  * @description register a new user, expects username, email and password
  * @access Public
  */
-async function registerUserController(req,res){
+async function registerUserController(req, res) {
   try {
     const { username, email, password } = req.body
 
@@ -43,10 +42,15 @@ async function registerUserController(req,res){
       { expiresIn: "1d" }
     )
 
-    res.cookie("token", token)
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+    })
 
     res.status(201).json({
       message: "User registered successfully",
+      token,
       user: {
         id: user._id,
         username: user.username,
@@ -89,7 +93,7 @@ async function loginUserController(req, res) {
 
     if (!isPasswordValid) {
       return res.status(400).json({
-        message: "Invalid password"
+        message: "Invalid email or password"
       })
     }
 
@@ -99,10 +103,15 @@ async function loginUserController(req, res) {
       { expiresIn: "1d" }
     )
 
-    res.cookie("token", token)
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+    })
 
     res.status(200).json({
       message: "User logged in successfully",
+      token,
       user: {
         id: user._id,
         username: user.username,
@@ -119,13 +128,13 @@ async function loginUserController(req, res) {
 }
 
 /**
- * @name LogoutUserController
+ * @name logoutUserController
  * @description clear token from user cookie and add the token in blacklist
  * @access public
  */
 async function logoutUserController(req, res) {
   try {
-    const token = req.cookies.token
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1]
 
     if (token) {
       await tokenBlackListModel.create({ token })
@@ -141,9 +150,20 @@ async function logoutUserController(req, res) {
       message: "Error during logout",
       error: error.message
     })
-  } res) {
+  }
+}
+
+/**
+ * @name getMeController
+ * @description fetch logged in user data
+ * @access Private
+ */
+async function getMeController(req, res) {
   try {
     const user = await userModel.findById(req.user.id)
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
 
     res.status(200).json({
       message: "User data fetched successfully",
@@ -159,23 +179,12 @@ async function logoutUserController(req, res) {
       message: "Error fetching user",
       error: error.message
     })
-  }nst user =await userModel.findById(req.user.id)
-   res.status(200).json({
-    message:"User data fecth successfully",
-    user:{
-        id:user._id,
-        username:user.username,
-        email:user.email
-    }
-   })
+  }
 }
 
-
-
-
-module.exports={
-    registerUserController,
-    loginUserController,
-    logoutUserController,
-    getMeController
+module.exports = {
+  registerUserController,
+  loginUserController,
+  logoutUserController,
+  getMeController
 }

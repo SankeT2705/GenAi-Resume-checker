@@ -1,11 +1,11 @@
-const pdfparse=require("pdf-parse")
-const generateInterviewReport=require("../services/ai.service")
-const interviewReportModel=require("../models/interviewReport.model")
+const pdfparse = require("pdf-parse")
+const generateInterviewReport = require("../services/ai.service")
+const interviewReportModel = require("../models/interviewReport.model")
 
 /**
  * @description Controller to generate interview report
  */
-async function generateInterViewReportController(req,res){
+async function generateInterViewReportController(req, res) {
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -48,29 +48,43 @@ async function generateInterViewReportController(req,res){
     })
   }
 }
+
 /**
  * @description Controller to get interview report by interviewId
  */
-async function getInterviewReportByController(req,res){
+async function getInterviewReportByController(req, res) {
   try {
     const { interviewId } = req.params
     const interviewReport = await interviewReportModel.findOne({ _id: interviewId, user: req.user.id })
-    
+
     if (!interviewReport) {
       return res.status(404).json({
         message: "Interview report not found"
       })
     }
-    
+
     res.status(200).json({
       message: "Interview report fetched successfully",
       interviewReport
     })
+  } catch (error) {
+    console.error("Error fetching interview report:", error)
+    res.status(500).json({
+      message: "Error fetching interview report",
+      error: error.message
+    })
+  }
+}
+
+/**
+ * @description Controller to get all interview reports for user
+ */
+async function getAllInterviewReportsController(req, res) {
   try {
     const interviewReports = await interviewReportModel.find({ user: req.user.id })
       .sort({ createdAt: -1 })
       .select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan")
-    
+
     res.status(200).json({
       message: "Interview reports fetched successfully",
       interviewReports
@@ -81,16 +95,11 @@ async function getInterviewReportByController(req,res){
       message: "Error fetching interview reports",
       error: error.message
     })
-  }   error: error.message
-    })
   }
 }
 
-async function getAllInterviewReportsController(req,res){
- const interviewReports=await interviewReportModel.find({user:req.user.id}).sort({createdAt:-1}).select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan")
- res.status(200).json({
-    message:"Interview report fetched successfully",
-    interviewReports
- })
+module.exports = {
+  generateInterViewReportController,
+  getInterviewReportByController,
+  getAllInterviewReportsController
 }
-module.exports={generateInterViewReportController,getInterviewReportByController,getAllInterviewReportsController}
