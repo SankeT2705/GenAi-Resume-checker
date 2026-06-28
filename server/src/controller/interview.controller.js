@@ -1,4 +1,3 @@
-const pdfparse = require("pdf-parse")
 const generateInterviewReport = require("../services/ai.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
@@ -13,6 +12,7 @@ async function generateInterViewReportController(req, res) {
       })
     }
 
+    const pdfparse = require("pdf-parse")
     const resumeContent = await pdfparse(req.file.buffer)
     const { selfDescription, jobDescription } = req.body
 
