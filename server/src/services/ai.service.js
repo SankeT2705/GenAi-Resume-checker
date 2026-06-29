@@ -2,9 +2,15 @@ const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
 const { zodToJsonSchema } = require("zod-to-json-schema")
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_GENAI_API_KEY
-});
+function getAiClient() {
+  const rawKey = process.env.GOOGLE_GENAI_API_KEY
+  if (!rawKey || !rawKey.trim()) {
+    throw new Error("GOOGLE_GENAI_API_KEY is missing from environment variables. Please configure GOOGLE_GENAI_API_KEY in your server settings.")
+  }
+
+  const cleanKey = rawKey.replace(/^["']|["']$/g, '').trim()
+  return new GoogleGenAI({ apiKey: cleanKey })
+}
 
 const interviewReportSchema = z.object({
   matchScore: z.number().describe("A score between 0 and 100 indicating how well the candidate's profile matches with the job description"),
@@ -59,8 +65,8 @@ const perfectResumeSchema = z.object({
   }),
   professionalSummary: z.string().describe("Compelling, ATS-optimized 3-4 sentence professional summary tailored to the target job"),
   skills: z.array(z.object({
-    category: z.string().describe("Skill category, e.g., Languages, Frameworks & Libraries, Tools & Databases, Soft Skills"),
-    items: z.array(z.string())
+    category: z.string().describe("Skill category name, e.g. Programming Languages, Frameworks, Cloud & DevOps"),
+    items: z.array(z.string()).describe("List of specific technical skills or tools")
   })),
   experience: z.array(z.object({
     title: z.string(),
@@ -83,6 +89,7 @@ const perfectResumeSchema = z.object({
 })
 
 async function runGenAIWithFallback(prompt, schema) {
+  const ai = getAiClient();
   const jsonSchema = zodToJsonSchema(schema);
   delete jsonSchema['$schema'];
 
@@ -110,6 +117,9 @@ async function runGenAIWithFallback(prompt, schema) {
       return JSON.parse(fallbackResponse.text);
     } catch (fallbackErr) {
       console.error("Fallback model gemini-2.0-flash also failed:", fallbackErr.message);
+      if (fallbackErr.message.includes("401") || fallbackErr.message.includes("UNAUTHENTICATED")) {
+        throw new Error("Google GenAI Invalid API Key (401 Unauthenticated). Please verify GOOGLE_GENAI_API_KEY in your environment settings.");
+      }
       throw new Error(`Google GenAI Service Error: ${fallbackErr.message}`);
     }
   }
