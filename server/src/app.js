@@ -21,7 +21,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+    if (!origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app") || process.env.NODE_ENV !== "production") {
       return callback(null, true)
     }
     return callback(null, origin)
