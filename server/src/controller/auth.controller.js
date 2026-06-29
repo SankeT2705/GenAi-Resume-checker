@@ -160,7 +160,7 @@ async function logoutUserController(req, res) {
  */
 async function getMeController(req, res) {
   try {
-    const user = await userModel.findById(req.user.id)
+    const user = await userModel.findById(req.user.id).select("-password")
     if (!user) {
       return res.status(404).json({ message: "User not found" })
     }
@@ -170,7 +170,13 @@ async function getMeController(req, res) {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        bio: user.bio || "",
+        targetTitle: user.targetTitle || "",
+        phone: user.phone || "",
+        location: user.location || "",
+        linkedin: user.linkedin || "",
+        github: user.github || ""
       }
     })
   } catch (error) {
@@ -182,9 +188,130 @@ async function getMeController(req, res) {
   }
 }
 
+/**
+ * @name updateProfileController
+ * @description update logged in user profile details
+ * @access Private
+ */
+async function updateProfileController(req, res) {
+  try {
+    const { username, email, bio, targetTitle, phone, location, linkedin, github } = req.body
+
+    const user = await userModel.findById(req.user.id)
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    const trimmedUsername = username ? username.trim() : ""
+    const trimmedEmail = email ? email.trim().toLowerCase() : ""
+
+    if (trimmedUsername && trimmedUsername !== user.username) {
+      const existingUsername = await userModel.findOne({ username: trimmedUsername, _id: { $ne: user._id } })
+      if (existingUsername) {
+        return res.status(400).json({ message: "Username already taken" })
+      }
+      user.username = trimmedUsername
+    }
+
+    if (trimmedEmail && trimmedEmail !== user.email) {
+      const existingEmail = await userModel.findOne({ email: trimmedEmail, _id: { $ne: user._id } })
+      if (existingEmail) {
+        return res.status(400).json({ message: "Email address already in use" })
+      }
+      user.email = trimmedEmail
+    }
+
+    if (bio !== undefined) user.bio = bio
+    if (targetTitle !== undefined) user.targetTitle = targetTitle
+    if (phone !== undefined) user.phone = phone
+    if (location !== undefined) user.location = location
+    if (linkedin !== undefined) user.linkedin = linkedin
+    if (github !== undefined) user.github = github
+
+    await user.save()
+
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    )
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+    })
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        targetTitle: user.targetTitle,
+        phone: user.phone,
+        location: user.location,
+        linkedin: user.linkedin,
+        github: user.github
+      }
+    })
+  } catch (error) {
+    console.error("Update profile error:", error)
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern || {})[0] || "field"
+      return res.status(400).json({ message: `That ${field} is already in use by another account.` })
+    }
+    res.status(500).json({
+      message: error.message || "Error updating profile",
+      error: error.message
+    })
+  }
+}
+
+/**
+ * @name updatePasswordController
+ * @description update logged in user password
+ * @access Private
+ */
+async function updatePasswordController(req, res) {
+  try {
+    const { currentPassword, newPassword } = req.body
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Current password and new password are required" })
+    }
+
+    const user = await userModel.findById(req.user.id)
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password)
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Current password is incorrect" })
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10)
+    await user.save()
+
+    res.status(200).json({
+      message: "Password changed successfully"
+    })
+  } catch (error) {
+    console.error("Update password error:", error)
+    res.status(500).json({
+      message: "Error updating password",
+      error: error.message
+    })
+  }
+}
+
 module.exports = {
   registerUserController,
   loginUserController,
   logoutUserController,
-  getMeController
+  getMeController,
+  updateProfileController,
+  updatePasswordController
 }

@@ -14,8 +14,33 @@ const userSchema=new mongoose.Schema({
     password:{
         type:String,
         required:true
+    },
+    bio: {
+        type: String,
+        default: ""
+    },
+    targetTitle: {
+        type: String,
+        default: ""
+    },
+    phone: {
+        type: String,
+        default: ""
+    },
+    location: {
+        type: String,
+        default: ""
+    },
+    linkedin: {
+        type: String,
+        default: ""
+    },
+    github: {
+        type: String,
+        default: ""
     }
-
+}, {
+    timestamps: true
 })
 
 const userModel=mongoose.model("users",userSchema)

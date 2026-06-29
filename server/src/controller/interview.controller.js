@@ -1,4 +1,5 @@
-const generateInterviewReport = require("../services/ai.service")
+const { generateInterviewReport, generatePerfectResumeData } = require("../services/ai.service")
+const { createPerfectResumePdf } = require("../services/pdf.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
 /**
@@ -43,7 +44,7 @@ async function generateInterViewReportController(req, res) {
   } catch (error) {
     console.error("Error generating interview report:", error)
     res.status(500).json({
-      message: "Error generating interview report",
+      message: error.message || "Error generating interview report",
       error: error.message
     })
   }
@@ -98,8 +99,44 @@ async function getAllInterviewReportsController(req, res) {
   }
 }
 
+/**
+ * @description Controller to generate and download Perfect ATS Resume PDF
+ */
+async function downloadPerfectResumeController(req, res) {
+  try {
+    const { interviewId } = req.params
+    const interviewReport = await interviewReportModel.findOne({ _id: interviewId, user: req.user.id })
+
+    if (!interviewReport) {
+      return res.status(404).json({
+        message: "Interview report not found"
+      })
+    }
+
+    const perfectResumeData = await generatePerfectResumeData({
+      resumeText: interviewReport.resume || "",
+      selfDescription: interviewReport.selfDescription || "",
+      jobDescription: interviewReport.jobDescription || "",
+      skillGaps: interviewReport.skillGaps || []
+    })
+
+    const pdfBuffer = await createPerfectResumePdf(perfectResumeData)
+
+    res.setHeader("Content-Type", "application/pdf")
+    res.setHeader("Content-Disposition", `attachment; filename="Perfect_ATS_Resume_${interviewId.slice(-6)}.pdf"`)
+    res.send(pdfBuffer)
+  } catch (error) {
+    console.error("Error generating perfect resume PDF:", error)
+    res.status(500).json({
+      message: error.message || "Failed to generate perfect resume PDF",
+      error: error.message
+    })
+  }
+}
+
 module.exports = {
   generateInterViewReportController,
   getInterviewReportByController,
-  getAllInterviewReportsController
+  getAllInterviewReportsController,
+  downloadPerfectResumeController
 }

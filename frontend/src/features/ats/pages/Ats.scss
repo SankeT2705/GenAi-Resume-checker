@@ -1,0 +1,481 @@
+.ats-page {
+  min-height: calc(100vh - 70px);
+  padding: 2.5rem 1.5rem;
+
+  .ats-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .ats-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    h1 {
+      color: white;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin: 0 auto 1.8rem;
+      line-height: 1.6;
+    }
+  }
+
+  .ats-tabs {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.3rem;
+    border-radius: 14px;
+    gap: 0.3rem;
+
+    button {
+      padding: 0.7rem 1.6rem;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+
+      &.active {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: white;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      }
+    }
+  }
+
+  .ats-error-banner {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 12px;
+    color: #fca5a5;
+    text-align: center;
+  }
+
+  .ats-card-single {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 750px;
+    margin: 0 auto;
+
+    h2 {
+      color: white;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+  }
+
+  .ats-upload-box {
+    display: block;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.02);
+
+    &:hover {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    input {
+      display: none;
+    }
+
+    .upload-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+
+      .icon {
+        font-size: 3rem;
+      }
+
+      .text {
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .subtext {
+        color: #64748b;
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .ats-submit-btn {
+    width: 100%;
+    margin-top: 1.8rem;
+    padding: 1.1rem;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+  }
+
+  .ats-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .ats-history-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.3rem 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        border-color: #3b82f6;
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .left {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+
+        .score-badge {
+          width: 55px;
+          height: 55px;
+          border-radius: 50%;
+          border: 3px solid;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 1.05rem;
+          flex-shrink: 0;
+        }
+
+        .info {
+          h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+          }
+
+          p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+        }
+      }
+
+      .right {
+        color: #64748b;
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  /* Result Detailed Page Styles */
+  .back-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+  }
+
+  .ats-result-header {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+
+    .score-circle-wrapper {
+      flex-shrink: 0;
+
+      .score-circle {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+
+        .inner {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background: #0f172a;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          .number {
+            color: white;
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1;
+          }
+
+          .label {
+            color: #94a3b8;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 4px;
+          }
+        }
+      }
+    }
+
+    .summary-box {
+      h2 {
+        color: white;
+        font-size: 1.6rem;
+        margin-bottom: 0.8rem;
+      }
+
+      p {
+        color: #cbd5e1;
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+    }
+  }
+
+  .ats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.8rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .ats-card {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 1.8rem;
+
+    &.full {
+      margin-bottom: 1.8rem;
+    }
+
+    h3 {
+      color: white;
+      font-size: 1.25rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .point-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+
+      li {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+      }
+
+      &.positive li {
+        color: #a7f3d0;
+        background: rgba(16, 185, 129, 0.08);
+      }
+
+      &.negative li {
+        color: #fca5a5;
+        background: rgba(239, 68, 68, 0.08);
+      }
+    }
+  }
+
+  .sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+
+    .section-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 1.2rem;
+
+      .sec-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+
+        h4 {
+          color: white;
+          font-size: 1rem;
+        }
+
+        .badge {
+          font-size: 0.75rem;
+          font-weight: 700;
+          padding: 0.25rem 0.6rem;
+          border-radius: 20px;
+        }
+      }
+
+      p {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      &.status-good .badge {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+      }
+      &.status-needs-improvement .badge {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+      }
+      &.status-missing .badge {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+      }
+    }
+  }
+
+  .typo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    .typo-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      font-size: 0.9rem;
+
+      .issue { color: #fca5a5; }
+      .suggestion { color: #86efac; }
+    }
+  }
+
+  .recommendation-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+
+      .num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: white;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 0.85rem;
+      }
+
+      .txt {
+        color: #e2e8f0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-top: 2px;
+      }
+    }
+  }
+}
+
+.ats-loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+
+  h2 { margin-top: 1.5rem; }
+  p { color: #94a3b8; margin-top: 0.5rem; max-width: 500px; }
+}
+
+@media (max-width: 768px) {
+  .ats-page {
+    .ats-result-header {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .ats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

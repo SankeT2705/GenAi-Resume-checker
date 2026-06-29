@@ -4,7 +4,6 @@ let isConnected = false;
 
 async function ConnectDB() {
   if (isConnected || mongoose.connection.readyState === 1) {
-    console.log("Using existing MongoDB connection");
     return;
   }
 

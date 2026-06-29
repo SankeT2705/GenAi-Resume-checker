@@ -31,4 +31,19 @@ authRouter.get("/logout",authController.logoutUserController)
  * @access private
  */
 authRouter.get("/get-me",authMiddleware.authUser,authController.getMeController)
+
+/**
+ * @route PUT /api/auth/profile
+ * @description Update logged in user profile details
+ * @access Private
+ */
+authRouter.put("/profile", authMiddleware.authUser, authController.updateProfileController)
+
+/**
+ * @route PUT /api/auth/password
+ * @description Change user password
+ * @access Private
+ */
+authRouter.put("/password", authMiddleware.authUser, authController.updatePasswordController)
+
 module.exports= authRouter

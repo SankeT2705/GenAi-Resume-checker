@@ -2,16 +2,32 @@ import React, { useState,useEffect } from "react";
 import "./interview.scss";
 import { useInterview } from "../hooks/useinterview";
 import { useParams } from "react-router";
+import { downloadPerfectResumeApi } from "../services/interview.api";
 
 function Interview() {
   const [activeTab, setActiveTab] = useState("technical");
   const { report, loading,getReportById } = useInterview();
   const { interviewId } = useParams();
-useEffect(() => {
-  if (interviewId) {
-    getReportById({ interviewId });
-  }
-}, [interviewId]);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
+
+  useEffect(() => {
+    if (interviewId) {
+      getReportById({ interviewId });
+    }
+  }, [interviewId]);
+
+  const handleDownloadPdf = async () => {
+    setDownloadError("");
+    setDownloading(true);
+    try {
+      await downloadPerfectResumeApi({ interviewId });
+    } catch (err) {
+      setDownloadError("Failed to generate PDF. Please try again.");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -137,6 +153,18 @@ useEffect(() => {
               {report.matchScore}%
             </span>
           </div>
+
+          <button 
+            className="download-resume-btn" 
+            onClick={handleDownloadPdf}
+            disabled={downloading}
+          >
+            {downloading ? "Generating Perfect Resume..." : "📄 Download Perfect Resume (PDF)"}
+          </button>
+
+          {downloadError && (
+            <div className="download-error">{downloadError}</div>
+          )}
 
           <h3>Skill Gaps</h3>
 

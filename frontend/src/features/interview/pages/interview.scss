@@ -139,7 +139,7 @@
       border-radius: 20px;
 
       padding: 2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.2rem;
 
       span {
         display: block;
@@ -148,6 +148,38 @@
         color: white;
         margin-top: .5rem;
       }
+    }
+
+    .download-resume-btn {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.3));
+      color: #34d399;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      margin-bottom: 1.5rem;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(5, 150, 105, 0.4));
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .download-error {
+      color: #fca5a5;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 1rem;
     }
 
     .skill-list {

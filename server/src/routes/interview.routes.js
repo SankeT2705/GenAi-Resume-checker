@@ -21,4 +21,12 @@ interViewRouter.get("/report/:interviewId",authMiddleware.authUser,interviewCont
  */
 
 interViewRouter.get("/",authMiddleware.authUser,interviewController.getAllInterviewReportsController)
+
+/**
+ * @route GET /api/interview/report/:interviewId/perfect-resume
+ * @description Generate and download Perfect ATS Resume PDF
+ * @access Private
+ */
+interViewRouter.get("/report/:interviewId/perfect-resume", authMiddleware.authUser, interviewController.downloadPerfectResumeController)
+
 module.exports=interViewRouter
