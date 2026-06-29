@@ -17,9 +17,7 @@ if (process.env.NODE_ENV !== "production") {
   })
 }
 
-app.use(express.json())
-app.use(cookieParser())
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app") || process.env.NODE_ENV !== "production") {
       return callback(null, true)
@@ -28,16 +26,24 @@ app.use(cors({
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}))
+  allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions))
+app.use(express.json())
+app.use(cookieParser())
 
 // Root route check
 app.get("/", (req, res) => {
   res.status(200).json({ message: "AI Resume & Interview Analyzer Backend is running successfully!" })
 })
 
-// Ensure database is connected on serverless request
+// Ensure database is connected on serverless request (skipping preflight OPTIONS)
 app.use(async (req, res, next) => {
+  if (req.method === "OPTIONS") {
+    return res.status(200).end()
+  }
   try {
     await connectToDB()
     next()
