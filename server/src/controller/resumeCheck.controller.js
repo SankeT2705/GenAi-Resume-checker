@@ -1,4 +1,3 @@
-const pdfparse = require("pdf-parse")
 const { analyzeResumeAts } = require("../services/ai.service")
 const resumeCheckModel = require("../models/resumeCheck.model")
 
@@ -13,6 +12,7 @@ async function analyzeResumeAtsController(req, res) {
       })
     }
 
+    const pdfparse = require("pdf-parse/lib/pdf-parse.js")
     const resumeContent = await pdfparse(req.file.buffer)
     if (!resumeContent.text || !resumeContent.text.trim()) {
       return res.status(400).json({

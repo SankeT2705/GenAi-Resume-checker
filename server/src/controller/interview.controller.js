@@ -13,7 +13,7 @@ async function generateInterViewReportController(req, res) {
       })
     }
 
-    const pdfparse = require("pdf-parse")
+    const pdfparse = require("pdf-parse/lib/pdf-parse.js")
     const resumeContent = await pdfparse(req.file.buffer)
     const { selfDescription, jobDescription } = req.body
 
