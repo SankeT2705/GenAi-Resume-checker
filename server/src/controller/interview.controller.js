@@ -1,3 +1,4 @@
+const parsePdfBuffer = require("../utils/pdfParser")
 const { generateInterviewReport, generatePerfectResumeData } = require("../services/ai.service")
 const { createPerfectResumePdf } = require("../services/pdf.service")
 const interviewReportModel = require("../models/interviewReport.model")
@@ -13,8 +14,7 @@ async function generateInterViewReportController(req, res) {
       })
     }
 
-    const pdfparse = require("pdf-parse/lib/pdf-parse.js")
-    const resumeContent = await pdfparse(req.file.buffer)
+    const resumeContent = await parsePdfBuffer(req.file.buffer)
     const { selfDescription, jobDescription } = req.body
 
     if (!selfDescription || !jobDescription) {

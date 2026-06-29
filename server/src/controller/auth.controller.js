@@ -54,7 +54,13 @@ async function registerUserController(req, res) {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        bio: user.bio || "",
+        targetTitle: user.targetTitle || "",
+        phone: user.phone || "",
+        location: user.location || "",
+        linkedin: user.linkedin || "",
+        github: user.github || ""
       }
     })
   } catch (error) {
@@ -68,8 +74,8 @@ async function registerUserController(req, res) {
 
 /**
  * @name loginUserController
- * @description login a user, expects email and password 
- * @access Public
+ * @description authenticate user and set token in cookie
+ * @access public
  */
 async function loginUserController(req, res) {
   try {
@@ -100,7 +106,7 @@ async function loginUserController(req, res) {
     const token = jwt.sign(
       { id: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "7d" }
     )
 
     res.cookie("token", token, {
@@ -115,7 +121,13 @@ async function loginUserController(req, res) {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        bio: user.bio || "",
+        targetTitle: user.targetTitle || "",
+        phone: user.phone || "",
+        location: user.location || "",
+        linkedin: user.linkedin || "",
+        github: user.github || ""
       }
     })
   } catch (error) {

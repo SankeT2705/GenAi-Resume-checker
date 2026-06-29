@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../auth/hooks/useAuth";
-import { updateProfile, updatePassword } from "../services/profile.api";
+import { getProfile, updateProfile, updatePassword } from "../services/profile.api";
 import "./Profile.scss";
 
 const Profile = () => {
@@ -26,19 +26,40 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("info");
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        username: user.username || "",
-        email: user.email || "",
-        bio: user.bio || "",
-        targetTitle: user.targetTitle || "",
-        phone: user.phone || "",
-        location: user.location || "",
-        linkedin: user.linkedin || "",
-        github: user.github || ""
-      });
-    }
-  }, [user]);
+    const fetchFreshProfile = async () => {
+      try {
+        const res = await getProfile();
+        if (res?.user) {
+          setUser(res.user);
+          setFormData({
+            username: res.user.username || "",
+            email: res.user.email || "",
+            bio: res.user.bio || "",
+            targetTitle: res.user.targetTitle || "",
+            phone: res.user.phone || "",
+            location: res.user.location || "",
+            linkedin: res.user.linkedin || "",
+            github: res.user.github || ""
+          });
+        }
+      } catch (err) {
+        if (user) {
+          setFormData({
+            username: user.username || "",
+            email: user.email || "",
+            bio: user.bio || "",
+            targetTitle: user.targetTitle || "",
+            phone: user.phone || "",
+            location: user.location || "",
+            linkedin: user.linkedin || "",
+            github: user.github || ""
+          });
+        }
+      }
+    };
+
+    fetchFreshProfile();
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

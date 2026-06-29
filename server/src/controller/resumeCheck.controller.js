@@ -1,3 +1,4 @@
+const parsePdfBuffer = require("../utils/pdfParser")
 const { analyzeResumeAts } = require("../services/ai.service")
 const resumeCheckModel = require("../models/resumeCheck.model")
 
@@ -12,8 +13,7 @@ async function analyzeResumeAtsController(req, res) {
       })
     }
 
-    const pdfparse = require("pdf-parse/lib/pdf-parse.js")
-    const resumeContent = await pdfparse(req.file.buffer)
+    const resumeContent = await parsePdfBuffer(req.file.buffer)
     if (!resumeContent.text || !resumeContent.text.trim()) {
       return res.status(400).json({
         message: "Could not extract readable text from the uploaded PDF resume."
